@@ -6,6 +6,11 @@ textarea {
     display: flex;
     flex-direction: column;
 }
+
+.hstack {
+    display: flex;
+    flex-direction: row;
+}
 .email-preview {
     border: solid;
     border-color: black;
@@ -23,4 +28,8 @@ textarea {
 .email-preview-timestamp {
     float: right;
     font-weight: lighter;
+}
+
+#email-view strong {
+    margin-right: 10px;
 }

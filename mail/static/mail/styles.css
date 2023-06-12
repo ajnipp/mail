@@ -33,3 +33,7 @@ textarea {
 #email-view strong {
     margin-right: 10px;
 }
+
+#view-body {
+    white-space: pre-line;
+}

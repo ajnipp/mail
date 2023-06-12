@@ -63,6 +63,13 @@ function load_email(email_id) {
     document.getElementById('view-timestamp').innerHTML = email.timestamp;
     document.getElementById('view-body').innerHTML = email.body;
 
+    fetch(`emails/${email_id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          read: true
+      })
+    })
+
   })
   .catch(error => {
     print(error);
@@ -89,7 +96,7 @@ function load_mailbox(mailbox) {
         const box = document.createElement('div');
         box.className = 'email-preview';
         if (email.read) {
-          box.style.backgroundColor = 'gray';
+          box.style.backgroundColor = '#D3D3D3';
         }
         box.onclick = function() {
           load_email(email.id)

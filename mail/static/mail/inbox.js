@@ -44,7 +44,6 @@ function compose_email() {
       .catch(error => {
         console.log(error)
       });
-    return false;
   };
 }
 

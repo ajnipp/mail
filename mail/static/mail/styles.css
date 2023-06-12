@@ -1,3 +1,26 @@
 textarea {
     min-height: 400px;
 }
+
+.vstack {
+    display: flex;
+    flex-direction: column;
+}
+.email-preview {
+    border: solid;
+    border-color: black;
+    border-width: 1px;
+    padding: 5px;
+}
+.email-preview div {
+    display: inline;
+}
+
+.email-preview-sender{
+    margin-right: 30px;
+    font-weight: bold;
+}
+.email-preview-timestamp {
+    float: right;
+    font-weight: lighter;
+}

@@ -55,25 +55,61 @@ function load_email(email_id) {
   document.querySelector('#email-view').style.display = 'block';
 
   fetch(`emails/${email_id}`)
-  .then(response => response.json())
-  .then(email => {
-    document.getElementById('view-sender').innerHTML = email.sender;
-    document.getElementById('view-recipients').innerHTML = email.recipients;
-    document.getElementById('view-subject').innerHTML = email.subject;
-    document.getElementById('view-timestamp').innerHTML = email.timestamp;
-    document.getElementById('view-body').innerHTML = email.body;
+    .then(response => response.json())
+    .then(email => {
+      document.getElementById('view-sender').innerHTML = email.sender;
+      document.getElementById('view-recipients').innerHTML = email.recipients;
+      document.getElementById('view-subject').innerHTML = email.subject;
+      document.getElementById('view-timestamp').innerHTML = email.timestamp;
+      document.getElementById('view-body').innerHTML = email.body;
 
-    fetch(`emails/${email_id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
+      const archive = document.getElementById('archive');
+      if (email.archived) {
+        archive.innerHTML = 'Unarchive';
+        archive.onclick = function () {
+
+          fetch(`emails/${email_id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              archived: false
+            })
+          })
+            .catch(error => {
+              console.log(error);
+            });
+          load_email(email_id);
+        }
+      } else {
+        archive.innerHTML = 'Archive';
+        archive.onclick = function () {
+
+          fetch(`emails/${email_id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+              archived: true
+            })
+          })
+            .catch(error => {
+              console.log(error);
+            });
+          load_email(email_id);
+        }
+      }
+
+      fetch(`emails/${email_id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
           read: true
+        })
       })
-    })
+        .catch(error => {
+          console.log(error);
+        });
 
-  })
-  .catch(error => {
-    print(error);
-  });
+    })
+    .catch(error => {
+      console.log(error);
+    });
 }
 
 function load_mailbox(mailbox) {
@@ -84,7 +120,7 @@ function load_mailbox(mailbox) {
   document.querySelector('#email-view').style.display = 'none';
 
   document.querySelector('#emails-list').innerHTML = '';
-  
+
   // Show the mailbox name
   document.querySelector('#emails-view-title').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
   fetch(`/emails/${mailbox}`)
@@ -92,24 +128,26 @@ function load_mailbox(mailbox) {
     .then(emails => {
       // Print emails
       console.log(emails);
-      emails.forEach( email => {
+      emails.forEach(email => {
         const box = document.createElement('div');
         box.className = 'email-preview';
-        if (email.read) {
+        if (email.read === true) {
           box.style.backgroundColor = '#D3D3D3';
+        } else {
+          box.style.backgroundColor = 'white';
         }
-        box.onclick = function() {
+        box.onclick = function () {
           load_email(email.id)
         }
         const sender = document.createElement('div');
         sender.className = 'email-preview-sender';
-        sender.innerHTML = email.sender; 
+        sender.innerHTML = email.sender;
         const subject = document.createElement('div');
         subject.className = 'email-preview-subject';
-        subject.innerHTML = email.subject; 
+        subject.innerHTML = email.subject;
         const timestamp = document.createElement('div');
         timestamp.className = 'email-preview-timestamp';
-        timestamp.innerHTML = email.timestamp; 
+        timestamp.innerHTML = email.timestamp;
         box.append(sender);
         box.append(subject);
         box.append(timestamp);
